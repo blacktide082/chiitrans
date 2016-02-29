@@ -264,6 +264,10 @@
     <EmbeddedResource Include="src\forms\UserNameForm.resx">
       <DependentUpon>UserNameForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

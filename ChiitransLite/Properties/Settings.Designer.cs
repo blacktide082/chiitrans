@@ -383,5 +383,29 @@ namespace ChiitransLite.Properties {
                 this["clipboardJapanese"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Expression Reading Meaning")]
+        public string anki_field_names {
+            get {
+                return ((string)(this["anki_field_names"]));
+            }
+            set {
+                this["anki_field_names"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("$d$t$r$t$n")]
+        public string anki_save_format {
+            get {
+                return ((string)(this["anki_save_format"]));
+            }
+            set {
+                this["anki_save_format"] = value;
+            }
+        }
     }
 }

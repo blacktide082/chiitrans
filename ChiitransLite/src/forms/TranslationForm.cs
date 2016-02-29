@@ -366,7 +366,7 @@ namespace ChiitransLite.forms {
                 if (unrealSelection()) {
                     saveWordToolStripMenuItem_Click(null, null);
                 }
-            } else if (e.Modifiers == Keys.None && e.KeyCode == Keys.S && unrealSelection()) {
+            } else if (e.Modifiers == Keys.None && e.KeyCode == Keys.R && unrealSelection()) {
                 ankiExportMenuItem_Click(null, null);
             }
         }
@@ -799,12 +799,30 @@ namespace ChiitransLite.forms {
 
         private void exportWord(WordParseResult wordParseResult) {
             EdictEntry entry = wordParseResult.getSelectedEntry();
-            string kanji = string.Join(", ", entry.kanji.Select(k => k.text));
-            string reading = string.Join(", ", entry.kana.Select(k => k.text));
-            string meaning = string.Join(", ", entry.sense.Select(m => m.glossary.First()).Take(3));
-            string sentence = lastParseResult.asText();
+
+            string formatted = Regex.Replace(Settings.app.ankiSaveFormat, "\\$.", f => {
+                switch(f.Value) {
+                    case "$t": return "\t";
+                    case "$d": // Dictionary form
+                        return string.Join(", ", entry.kanji.Select(k => k.text));
+                    case "$r": // Reading
+                        return string.Join(", ", entry.kana.Select(k => k.text));
+                    case "$n": // Definition
+                        return string.Join(", ", entry.sense.Select(m => m.glossary.First()).Take(3));
+                    case "$s": // Sentence
+                        return lastParseResult.asText();
+                    case "$f": // Furigana
+                        string kana = entry.kana.First().text;
+                        return string.Join(", ", entry.kanji.Select(k => $"{k.text}[{kana}]"));
+                    case "$i": // Title
+                        return Text;
+                    default: return f.Value;
+                }
+            });
+
             string fn = "anki-rt.txt"; // TODO: Anki realtime export file in settings/temp folder
-            File.WriteAllText(fn, $"add\t1\nExpression\tReading\tMeaning\n\n{kanji}\t{sentence}\t{meaning}");
+            string fieldNames = Settings.app.ankiFieldNames.Replace(' ', '\t');
+            File.WriteAllText(fn, $"add\t1\n{fieldNames}\n\n{formatted}");
             using (UdpClient client = new UdpClient("127.0.0.1", ANKI_REALTIME_IMPORT_PORT)) {
                 string fullPath = Path.GetFullPath(fn);
                 byte[] bytes = System.Text.Encoding.UTF8.GetBytes(fullPath);

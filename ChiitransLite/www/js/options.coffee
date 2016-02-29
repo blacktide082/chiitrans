@@ -91,6 +91,8 @@ resetOptionsInt = (op) ->
     $('#separateSpeaker').prop 'checked', op.separateSpeaker
     $('#stayOnTop').prop 'checked', op.stayOnTop
     $('#clipboardJapanese').prop 'checked', op.clipboardJapanese
+    $('#anki-field-names').val op.ankiFieldNames
+    $('#anki-save-format').val op.ankiSaveFormat
     $('#ok').focus()
     setDirty false
 
@@ -108,6 +110,8 @@ saveOptions = ->
             atlasEnv: $('#atlasEnv').val()
             stayOnTop: $('#stayOnTop').prop('checked')
             clipboardJapanese: $('#clipboardJapanese').prop('checked')
+            ankiSaveFormat: $('#anki-save-format').val()
+            ankiFieldNames: $('#anki-field-names').val()
         host().saveOptions op
         setDirty false
 
