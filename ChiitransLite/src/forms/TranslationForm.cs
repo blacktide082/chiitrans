@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -365,6 +366,8 @@ namespace ChiitransLite.forms {
                 if (unrealSelection()) {
                     saveWordToolStripMenuItem_Click(null, null);
                 }
+            } else if (e.Modifiers == Keys.None && e.KeyCode == Keys.S && unrealSelection()) {
+                ankiExportMenuItem_Click(null, null);
             }
         }
 
@@ -779,6 +782,34 @@ namespace ChiitransLite.forms {
                 }
             }
             File.AppendAllText(fn, kanji + "\t" + kana + "\t" + meaning + "\n");
+        }
+
+        private void ankiExportMenuItem_Click(object sender, EventArgs e) {
+            if (!lastIsRealSelection && !string.IsNullOrEmpty(lastSelection) && lastSelectedParseResult != null) {
+                foreach (ParseResult p in lastSelectedParseResult.getParts()) {
+                    if (p.asText() == lastSelection && (p is WordParseResult)) {
+                        exportWord(p as WordParseResult);
+                        webBrowser1.callScript("flash", "Word exported.");
+                    }
+                }
+            }
+        }
+
+        private static readonly int ANKI_REALTIME_IMPORT_PORT = 49600;
+
+        private void exportWord(WordParseResult wordParseResult) {
+            EdictEntry entry = wordParseResult.getSelectedEntry();
+            string kanji = string.Join(", ", entry.kanji.Select(k => k.text));
+            string reading = string.Join(", ", entry.kana.Select(k => k.text));
+            string meaning = string.Join(", ", entry.sense.Select(m => m.glossary.First()).Take(3));
+            string sentence = lastParseResult.asText();
+            string fn = "anki-rt.txt"; // TODO: Anki realtime export file in settings/temp folder
+            File.WriteAllText(fn, $"add\t1\nExpression\tReading\tMeaning\n\n{kanji}\t{sentence}\t{meaning}");
+            using (UdpClient client = new UdpClient("127.0.0.1", ANKI_REALTIME_IMPORT_PORT)) {
+                string fullPath = Path.GetFullPath(fn);
+                byte[] bytes = System.Text.Encoding.UTF8.GetBytes(fullPath);
+                client.Send(bytes, bytes.Length);
+            }
         }
     }
 }
