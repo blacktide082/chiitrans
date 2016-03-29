@@ -67,6 +67,9 @@ namespace ChiitransLite.texthook {
                     if (!string.IsNullOrEmpty(text)) {
                         lock (textBuffer) {
                             textBuffer.Append(text);
+                            if(textBuffer.Length >= 1000) {
+                                flush();
+                            }
                             /*if (isNewLine) {
                                 textBuffer.Append("<br>");
                             }*/
