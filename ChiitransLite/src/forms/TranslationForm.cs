@@ -1,5 +1,6 @@
 ﻿using ChiitransLite.misc;
 using ChiitransLite.settings;
+using ChiitransLite.src.misc;
 using ChiitransLite.texthook;
 using ChiitransLite.translation;
 using ChiitransLite.translation.atlas;
@@ -812,8 +813,12 @@ namespace ChiitransLite.forms {
                     case "$s": // Sentence
                         return lastParseResult.asText();
                     case "$f": // Furigana
-                        string kana = entry.kana.First().text;
-                        return string.Join(", ", entry.kanji.Select(k => $"{k.text}[{kana}]"));
+                        if(entry.kanji.Count == 0) {
+                            return string.Join(", ", entry.kana.Select(x => x.text));
+                        } else {
+                            string kana = entry.kana.First().text;
+                            return string.Join(", ", entry.kanji.Select(k => FuriganaUtils.generateFurigana(k.text, kana)));
+                        }
                     case "$i": // Title
                         return Text;
                     default: return f.Value;

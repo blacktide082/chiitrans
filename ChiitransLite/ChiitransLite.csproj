@@ -153,6 +153,7 @@
       <DependentUpon>UserNameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\misc\BrowserInterop.cs" />
+    <Compile Include="src\misc\FuriganaUtils.cs" />
     <Compile Include="src\misc\HiraganaConvertorCyrillic.cs" />
     <Compile Include="src\misc\HiraganaConvertor.cs" />
     <Compile Include="src\misc\IDictionaryExt.cs" />
