@@ -801,23 +801,32 @@ namespace ChiitransLite.forms {
         private void exportWord(WordParseResult wordParseResult) {
             EdictEntry entry = wordParseResult.getSelectedEntry();
 
+            var kanjiUsed = new HashSet<char>(wordParseResult.asText().Where(FuriganaUtils.isKanji));
+            var indices =
+                Enumerable.Zip(entry.kanji, Enumerable.Range(0, entry.kanji.Count), (e, i) => new { entry = e, index = i })
+                .Where(x => new HashSet<char>(x.entry.text.Where(FuriganaUtils.isKanji)).SetEquals(kanjiUsed))
+                .Select(x => x.index);
+            if(indices.Count() == 0) {
+                indices = Enumerable.Range(0, entry.kanji.Count);
+            }
+
             string formatted = Regex.Replace(Settings.app.ankiSaveFormat, "\\$.", f => {
                 switch(f.Value) {
                     case "$t": return "\t";
                     case "$d": // Dictionary form
-                        return string.Join(", ", entry.kanji.Select(k => k.text));
+                        return string.Join(", ", indices.Select(i => entry.kanji.ElementAt(i).text));
                     case "$r": // Reading
-                        return string.Join(", ", entry.kana.Select(k => k.text));
+                        return string.Join(", ", indices.Select(i => entry.kana.ElementAt(i).text));
                     case "$n": // Definition
-                        return string.Join(", ", entry.sense.Select(m => m.glossary.First()).Take(3));
+                        return string.Join(";<br />", entry.sense.Select(m => string.Join(", ", m.glossary)));
                     case "$s": // Sentence
                         return lastParseResult.asText();
                     case "$f": // Furigana
                         if(entry.kanji.Count == 0) {
-                            return string.Join(", ", entry.kana.Select(x => x.text));
+                            return string.Join(", ", indices.Select(i => entry.kana.ElementAt(i).text));
                         } else {
                             string kana = entry.kana.First().text;
-                            return string.Join(", ", entry.kanji.Select(k => FuriganaUtils.generateFurigana(k.text, kana)));
+                            return string.Join(", ", indices.Select(i => FuriganaUtils.generateFurigana(entry.kanji.ElementAt(i).text, kana)));
                         }
                     case "$i": // Title
                         return Text;

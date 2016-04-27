@@ -43,7 +43,7 @@ namespace ChiitransLite.src.misc {
 
         }
 
-        private static bool isKanji(char c) => Regex.IsMatch(c.ToString(), @"\p{IsCJKUnifiedIdeographs}");
+        public static bool isKanji(char c) => Regex.IsMatch(c.ToString(), @"\p{IsCJKUnifiedIdeographs}");
         private static bool isKana(char c) => Regex.IsMatch(c.ToString(), @"\p{IsHiragana}|\p{IsKatakana}");
 
 
