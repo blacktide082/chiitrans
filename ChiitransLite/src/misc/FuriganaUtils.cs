@@ -80,7 +80,8 @@ namespace ChiitransLite.src.misc {
                         ret.Add(WordPartWithFurigana.Kana(first.text));
                     } else return null;
                 } else {
-                    string prefix = "";
+                    string prefix = reading[0].ToString();
+                    reading = reading.Substring(1);
                     word.RemoveAt(0);
                     while(reading.Length > 0) {
                         var res = groupWithFurigana(new List<WordPart>(word.AsEnumerable()), reading);
