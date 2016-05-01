@@ -814,7 +814,11 @@ namespace ChiitransLite.forms {
                 switch(f.Value) {
                     case "$t": return "\t";
                     case "$d": // Dictionary form
-                        return string.Join(", ", indices.Select(i => entry.kanji.ElementAt(i).text));
+                        if (kanjiUsed.Count() == 0) {
+                            return string.Join(", ", entry.kana.Select(k => k.text));
+                        } else {
+                            return string.Join(", ", indices.Select(i => entry.kanji.ElementAt(i).text));
+                        }
                     case "$r": // Reading
                         return string.Join(", ", indices.Select(i => entry.kana.ElementAt(i).text));
                     case "$n": // Definition
