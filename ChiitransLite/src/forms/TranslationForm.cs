@@ -824,7 +824,7 @@ namespace ChiitransLite.forms {
                     case "$n": // Definition
                         return string.Join(";<br />", entry.sense.Select(m => string.Join(", ", m.glossary)));
                     case "$s": // Sentence
-                        return lastParseResult.asText();
+                        return Regex.Replace(lastParseResult.asText(), "\\n|\\r|\\r\\n|\\n\\r", "<br />");
                     case "$f": // Furigana
                         if(entry.kanji.Count == 0) {
                             return string.Join(", ", indices.Select(i => entry.kana.ElementAt(i).text));
