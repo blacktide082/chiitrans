@@ -29,11 +29,11 @@ wrap = (fn) ->
             fn fixedSrc, fixedCallback, ex
         else
             fn src, callback, ex
-            
+
 registerTranslators
     "ATLAS": (src, callback) ->
         host().translateAtlas src, callback
-        
+
     "ATLAS with TAHelper replacements": (src, callback) ->
         host().translateAtlas2 src, callback
 
@@ -42,12 +42,12 @@ registerTranslators
 
     "Google": wrap (src, callback) ->
         src = encodeURIComponent src
-        url = "http://translate.google.com/translate_a/t?client=t&text=#{src}&sl=ja&tl=en"
+        url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=en&dt=t&q=#{src}"
         get url, callback, (res) ->
             res = evalAsJson res
             ss = ($.trim(s[0]) for s in res[0])
             ss.join(' ').replace /\btsu\b/ig, ''
-            
+
     "Меховой пончик": wrap (src, callback) ->
         src = encodeURIComponent src
         url = "http://translate.google.com/translate_a/t?client=t&text=#{src}&sl=ja&tl=ru"
@@ -66,13 +66,13 @@ registerTranslators
     "SDL": wrap (src, callback) ->
         src = encodeURIComponent src
         url = "http://tets9.freetranslation.com/?sequence=core&charset=UTF-8&language=Japanese%2FEnglish&srctext=#{src}"
-        get { url: url, method: 'post' }, callback, (res) -> 
+        get { url: url, method: 'post' }, callback, (res) ->
             res.replace /《.*?》/g, ''
 
     "Excite": wrap (src, callback) ->
         src = encodeURIComponent src
         url = "http://www.excite.co.jp/world/english/?wb_lp=JAEN&before=#{src}"
-        get { url: url, method: 'post' }, callback, (res) -> 
+        get { url: url, method: 'post' }, callback, (res) ->
             res = /\<textarea id="after".*?\>([\s\S]*?)\<\/textarea\>/.exec res
             html2text res[1]
 

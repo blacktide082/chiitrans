@@ -59,7 +59,7 @@
     "Google": wrap(function(src, callback) {
       var url;
       src = encodeURIComponent(src);
-      url = "http://translate.google.com/translate_a/t?client=t&text=" + src + "&sl=ja&tl=en";
+      url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=en&dt=t&q=" + src;
       return get(url, callback, function(res) {
         var s, ss;
         res = evalAsJson(res);
