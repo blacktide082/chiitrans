@@ -111,7 +111,9 @@ namespace ChiitransLite.forms {
                 atlasEnv = Settings.app.atlasEnv,
                 atlasEnvList = getAtlasEnvList(),
                 stayOnTop = Settings.app.stayOnTop,
-                clipboardJapanese = Settings.app.clipboardJapanese
+                clipboardJapanese = Settings.app.clipboardJapanese,
+                ankiSaveFormat = Settings.app.ankiSaveFormat,
+                ankiFieldNames = Settings.app.ankiFieldNames
             };
         }
 
@@ -127,6 +129,9 @@ namespace ChiitransLite.forms {
             string atlasEnv = (string)op["atlasEnv"];
             bool stayOnTop = (bool)op["stayOnTop"];
             bool clipboardJapanese = (bool)op["clipboardJapanese"];
+
+            string ankiFieldNames = (string) op["ankiFieldNames"];
+            string ankiSaveFormat = (string) op["ankiSaveFormat"];
 
             TranslationForm.instance.setClipboardTranslation(clipboard);
             if (sentenceDelay >= 10) {
@@ -153,6 +158,8 @@ namespace ChiitransLite.forms {
             Settings.app.separateSpeaker = separateSpeaker;
             Settings.app.stayOnTop = stayOnTop;
             Settings.app.clipboardJapanese = clipboardJapanese;
+            Settings.app.ankiFieldNames = ankiFieldNames;
+            Settings.app.ankiSaveFormat = ankiSaveFormat;
             TranslationForm.instance.applyCurrentSettings();
         }
 

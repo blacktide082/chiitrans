@@ -21,6 +21,7 @@
                         <li data-target="parsing">Parsing</li>
                         <li data-target="translation">Translation</li>
                         <li data-target="appearance">Appearance</li>
+                        <li data-target="anki">Anki</li>
                     </ul>
                 </td>
                 <td class="view">
@@ -120,6 +121,35 @@
                         <div class="opgroup">
                             <input id="stayOnTop" type="checkbox" />
                             <label for="stayOnTop">Translation Window always stays on top</label>
+                        </div>
+                    </div>
+                    <div class="tab" id="anki">
+                        <div class="opgroup">
+                            <label for="anki-field-names">Field names: </label>
+                            <input type="text" id="anki-field-names" /><br />
+                            Field names should be separated by spaces and should match the format below
+                        </div>
+                        <div class="opgroup">
+                            <label for="anki-save-format">Save format</label>
+                            <input type="text" id="anki-save-format" />
+                            <div class="groupbox" style="margin-top: 5px;">
+                                <div class="caption">Available format tokens</div>
+                                <table>
+                                    <tr>
+                                        <td title="A normal tab (\t) character used for separating fields">$t: Tab character</td>
+                                        <td title="The dictionary/plain form of the saved word">$d: Dictionary form</td>
+                                        <td title="The kana reading of the saved word">$r: Reading</td>
+                                    </tr>
+                                    <tr>
+                                        <td title="The definition of saved word">$n: Definition</td>
+                                        <td title="The line the word appeared in">$s: Sentence</td>
+                                        <td title="Dictionary form with reading inserted in [] for furigana display">$f: Furigana</td>
+                                    </tr>
+                                    <tr>
+                                        <td title="The title of the game window.">$i: Title</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </td>

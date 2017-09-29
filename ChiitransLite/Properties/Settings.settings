@@ -86,5 +86,11 @@
     <Setting Name="clipboardJapanese" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="anki_field_names" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Expression Reading Meaning</Value>
+    </Setting>
+    <Setting Name="anki_save_format" Type="System.String" Scope="User">
+      <Value Profile="(Default)">$d$t$r$t$n</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

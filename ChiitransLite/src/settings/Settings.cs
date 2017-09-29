@@ -386,6 +386,24 @@ namespace ChiitransLite.settings {
             }
         }
 
+        public string ankiFieldNames {
+            get {
+                return Properties.Settings.Default.anki_field_names;
+            }
+            set {
+                Properties.Settings.Default.anki_field_names = value;
+            }
+        }
+
+        public string ankiSaveFormat {
+            get {
+                return Properties.Settings.Default.anki_save_format;
+            }
+            set {
+                Properties.Settings.Default.anki_save_format = value;
+            }
+        }
+
         internal bool isShowTranslation() {
             return translationDisplay == TranslationDisplay.TRANSLATION || translationDisplay == TranslationDisplay.BOTH;
         }

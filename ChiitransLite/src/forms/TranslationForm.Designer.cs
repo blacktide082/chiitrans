@@ -30,14 +30,15 @@
             this.translateSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.transparentModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.saveWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clipboardMonitor1 = new ChiitransLite.forms.ClipboardMonitor();
+            this.ankiExportMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,13 +52,14 @@
             this.addNewNameToolStripMenuItem,
             this.editTextToolStripMenuItem,
             this.saveWordToolStripMenuItem,
+            this.ankiExportMenuItem,
             this.toolStripSeparator2,
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem,
             this.toolStripSeparator1,
             this.transparentModeToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(235, 236);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(235, 258);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // banWordToolStripMenuItem
@@ -99,6 +101,14 @@
             this.editTextToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.editTextToolStripMenuItem.Text = "Edit text...";
             this.editTextToolStripMenuItem.Click += new System.EventHandler(this.editTextToolStripMenuItem_Click);
+            // 
+            // saveWordToolStripMenuItem
+            // 
+            this.saveWordToolStripMenuItem.Name = "saveWordToolStripMenuItem";
+            this.saveWordToolStripMenuItem.ShortcutKeyDisplayString = "S";
+            this.saveWordToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.saveWordToolStripMenuItem.Text = "Save word to file";
+            this.saveWordToolStripMenuItem.Click += new System.EventHandler(this.saveWordToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -149,14 +159,6 @@
             this.webBrowser1.WebBrowserShortcutsEnabled = false;
             this.webBrowser1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.webBrowser1_PreviewKeyDown);
             // 
-            // saveWordToolStripMenuItem
-            // 
-            this.saveWordToolStripMenuItem.Name = "saveWordToolStripMenuItem";
-            this.saveWordToolStripMenuItem.ShortcutKeyDisplayString = "S";
-            this.saveWordToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.saveWordToolStripMenuItem.Text = "Save word to file";
-            this.saveWordToolStripMenuItem.Click += new System.EventHandler(this.saveWordToolStripMenuItem_Click);
-            // 
             // clipboardMonitor1
             // 
             this.clipboardMonitor1.BackColor = System.Drawing.Color.Red;
@@ -166,6 +168,14 @@
             this.clipboardMonitor1.TabIndex = 1;
             this.clipboardMonitor1.Text = "clipboardMonitor1";
             this.clipboardMonitor1.Visible = false;
+            // 
+            // ankiExportMenuItem
+            // 
+            this.ankiExportMenuItem.Name = "ankiExportMenuItem";
+            this.ankiExportMenuItem.ShortcutKeyDisplayString = "R";
+            this.ankiExportMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.ankiExportMenuItem.Text = "Export word to Anki";
+            this.ankiExportMenuItem.Click += new System.EventHandler(this.ankiExportMenuItem_Click);
             // 
             // TranslationForm
             // 
@@ -210,5 +220,6 @@
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.ToolStripMenuItem editTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveWordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ankiExportMenuItem;
     }
 }

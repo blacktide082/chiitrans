@@ -1,5 +1,6 @@
 ﻿using ChiitransLite.misc;
 using ChiitransLite.settings;
+using ChiitransLite.src.misc;
 using ChiitransLite.texthook;
 using ChiitransLite.translation;
 using ChiitransLite.translation.atlas;
@@ -17,6 +18,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -365,6 +367,8 @@ namespace ChiitransLite.forms {
                 if (unrealSelection()) {
                     saveWordToolStripMenuItem_Click(null, null);
                 }
+            } else if (e.Modifiers == Keys.None && e.KeyCode == Keys.R && unrealSelection()) {
+                ankiExportMenuItem_Click(null, null);
             }
         }
 
@@ -779,6 +783,69 @@ namespace ChiitransLite.forms {
                 }
             }
             File.AppendAllText(fn, kanji + "\t" + kana + "\t" + meaning + "\n");
+        }
+
+        private void ankiExportMenuItem_Click(object sender, EventArgs e) {
+            if (!lastIsRealSelection && !string.IsNullOrEmpty(lastSelection) && lastSelectedParseResult != null) {
+                foreach (ParseResult p in lastSelectedParseResult.getParts()) {
+                    if (p.asText() == lastSelection && (p is WordParseResult)) {
+                        exportWord(p as WordParseResult);
+                        webBrowser1.callScript("flash", "Word exported.");
+                    }
+                }
+            }
+        }
+
+        private static readonly int ANKI_REALTIME_IMPORT_PORT = 49600;
+
+        private void exportWord(WordParseResult wordParseResult) {
+            EdictEntry entry = wordParseResult.getSelectedEntry();
+
+            var kanjiUsed = new HashSet<char>(wordParseResult.asText().Where(FuriganaUtils.isKanji));
+            var indices =
+                Enumerable.Zip(entry.kanji, Enumerable.Range(0, entry.kanji.Count), (e, i) => new { entry = e, index = i })
+                .Where(x => new HashSet<char>(x.entry.text.Where(FuriganaUtils.isKanji)).SetEquals(kanjiUsed))
+                .Select(x => x.index);
+            if(indices.Count() == 0) {
+                indices = Enumerable.Range(0, entry.kanji.Count);
+            }
+
+            string formatted = Regex.Replace(Settings.app.ankiSaveFormat, "\\$.", f => {
+                switch(f.Value) {
+                    case "$t": return "\t";
+                    case "$d": // Dictionary form
+                        if (kanjiUsed.Count() == 0) {
+                            return string.Join(", ", entry.kana.Select(k => k.text));
+                        } else {
+                            return string.Join(", ", indices.Select(i => entry.kanji.ElementAt(i).text));
+                        }
+                    case "$r": // Reading
+                        return string.Join(", ", indices.Select(i => entry.kana.ElementAt(i).text));
+                    case "$n": // Definition
+                        return string.Join(";<br />", entry.sense.Select(m => string.Join(", ", m.glossary)));
+                    case "$s": // Sentence
+                        return Regex.Replace(lastParseResult.asText(), "\\n|\\r|\\r\\n|\\n\\r", "<br />");
+                    case "$f": // Furigana
+                        if(entry.kanji.Count == 0) {
+                            return string.Join(", ", indices.Select(i => entry.kana.ElementAt(i).text));
+                        } else {
+                            string kana = entry.kana.First().text;
+                            return string.Join(", ", indices.Select(i => FuriganaUtils.generateFurigana(entry.kanji.ElementAt(i).text, kana)));
+                        }
+                    case "$i": // Title
+                        return Text;
+                    default: return f.Value;
+                }
+            });
+
+            string fn = "anki-rt.txt"; // TODO: Anki realtime export file in settings/temp folder
+            string fieldNames = Settings.app.ankiFieldNames.Replace(' ', '\t');
+            File.WriteAllText(fn, $"add\t1\n{fieldNames}\n\n{formatted}");
+            using (UdpClient client = new UdpClient("127.0.0.1", ANKI_REALTIME_IMPORT_PORT)) {
+                string fullPath = Path.GetFullPath(fn);
+                byte[] bytes = System.Text.Encoding.UTF8.GetBytes(fullPath);
+                client.Send(bytes, bytes.Length);
+            }
         }
     }
 }
